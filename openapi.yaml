@@ -1,0 +1,213 @@
+openapi: 3.0.1
+info:
+  title: Swagger Petstore
+  description: A sample API that uses a petstore as an example to demonstrate features
+    in the swagger-2.0 specification
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Swagger API Team
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: http://petstore.swagger.io/api
+paths:
+  /pets:
+    get: 
+      description: Returns all pets from the system that the user has access to
+      responses:
+        200:
+          description: A list of pets.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    Pet:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Menu:
+      required:
+      - label
+      properties:
+        label:
+          type: string
+          description: The label identifier of the menu
+          default: ''
+          example: settings
+        url:
+          type: string
+          description: The url associeted with the menu
+          default: ''
+          example: https://signbox.com/dashboard#Settings
+        icon:
+          type: string
+          description: The url for the customized icon for the menu
+          default: ''
+          example: https://s3.aws.com/sboxbucket/ypf/menues/settings/icons/7h387473487hg34fn.png
+    Role:
+      required:
+      - description
+      - isConfidential
+      properties:
+        description:
+          type: string
+          description: text with the details of the role.
+          example: Administrative Rol lets users control tenant account settings.
+          pattern: "^(.*)$"
+        isConfidential:
+          type: boolean
+          description: Flags the Rol of a confidential user whose data should remain secret even to other admin users.
+          default: false
+          example: false
+          
+    UserField:
+      required:
+      - isUnique
+      - isRequired
+      - checksRegex
+      properties:
+        isUnique:
+          type: boolean
+          description: This flag indicates if the field should be unique amongst all users.
+          default: false
+          example: true
+        isRequired:
+          type: boolean
+          description: This flag indicates if the field is obligatory for all users.
+          default: false
+          example: false
+        checksRegex:
+          type: boolean
+          description: This flag indicates if field value should be validated against a regex expresion.
+          default: false
+          example: false
+        pattern:
+          type: string
+          description: Regex expression value for pattern validation.
+          default: ''
+          example: "\\w{5}\\s"
+        validationClass:
+          type: string
+          description: The name of the backend class that is responsable of this field value validation.
+          default: ''
+          example: CuilCuitValidation.class
+          pattern: "^(.*)$"
+        validationDescription:
+          type: string
+          description: Explains the rules used for field value validation.
+          default: ''
+          example: CuilCuit validates against the standar algorithm of AFIP Ley2589.
+    UserFieldValue:
+        required:
+        - value
+        properties:
+          value:
+            type: string
+            description: An actual user field value.
+            default: ''
+            example: '20364569874'
+    
+    User: 
+      required:
+      - userName
+      - email
+      - firstName
+      - lastName
+      - hasUsbToken
+      - password
+      - hasTemporalPassword
+      - hasElectronicSignature
+      - alternativeEmail
+      - cuilCuit
+      properties:
+        userName:
+            type: string
+            description: Generated User Name can be changed later...
+            default: ''
+            example: signbox user
+        email:
+            type: string
+            description: email address asociated to this account.
+            default: ''
+            example: user@signbox.com
+        firstName:
+            type: string
+            description: user space separated first names
+            default: ''
+            example: Userfirstname
+        lastName:
+            type: string
+            description: user space separated last names
+            default: ''
+            example: Userlastname
+        birthDate:
+            type: string
+            description: date of birth of the user
+            default: ''
+            example: '2000-04-23T18:25:43.511Z'
+        rkup:
+            type: string
+            description: The Rkup Schema
+            default: ''
+            example: '20364569874'
+        hasUsbToken:
+            type: boolean
+            description: flag indicates if the user has a configured usb crypto token
+            default: false
+        password:
+            type: string
+            description: salted password for the user
+            default: ''
+            example: 'AF15368FC381984CD83D99AA664B'
+        stringIdentifier:
+            type: string
+            description: Unique string identifier for the user.
+            default: ''
+            example: as5df465da6s5df5fds654-51sd65
+        lastPasswordUpdateDate:
+            type: string
+            description: date in which the last password update took place.
+            default: ''
+            example: '2019-04-23T18:25:43.511Z'
+        registrationDate:
+            type: string
+            description: date of user registration
+            default: ''
+            example: '2000-04-23T18:25:43.511Z'
+        dischargeDate:
+            type: string
+            description: date of user discharge
+            default: ''
+            example: '2000-04-23T18:25:43.511Z'
+        hasTemporalPassword:
+            type: boolean
+            description: flag indicates if the user has a temporal password.
+            default: false
+        hasElectronicSignature:
+            type: boolean
+            description: flag indicates if the user has an associated electronic signature.
+            default: false
+        alternativeEmail:
+            type: string
+            description: alternative email address provided as contact data.
+            default: ''
+            example: user@gmail.com
+        cuilCuit:
+            type: string
+            description: afip identificator.
+            default: ''
+            example: '20286547899'
