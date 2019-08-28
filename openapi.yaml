@@ -12,6 +12,16 @@ info:
 servers:
 - url: http://petstore.swagger.io/api
 paths:
+  /login:
+    post:
+      description: launches user credential validation and returns user data summary.
+      responses:
+        200:
+          description: Successfull login 
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
   /pets:
     get: 
       description: Returns all pets from the system that the user has access to
@@ -24,6 +34,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Pet'
+  /documents:
+    get:
+      description: Returns all documents available to the user
+      responses:
+        200:
+          description: Paginated list of docuemnts
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
 components:
   schemas:
     Pet:
@@ -208,6 +231,100 @@ components:
             example: user@gmail.com
         cuilCuit:
             type: string
+            nullable: true
             description: afip identificator.
             default: ''
             example: '20286547899'
+            
+    Content:
+      required:
+        - creationDate
+        - contentType
+      properties:
+        creationDate:
+          type: string
+          nullable: false
+          description: date when the content was created
+          example: '2000-04-23T18:25:43.511Z'
+        deleted:
+          type: boolean
+          description: falg indicates the content was delted
+          default: false
+        contentType:
+          type: string
+          description: Enum indicates what type of content this is.
+          enum:
+          - REPOSITORY
+          - FOLDER
+          - DOCUMENT
+          example: REPOSITORY
+    
+    FieldDefinition:
+      required: 
+      - name
+      - fieldType
+      - required
+      properties:
+        name:
+          type: string
+          example: professional account CBU
+        description:
+          type: string
+          example: This field contains the bank account CBU for the refund.
+        fieldType:
+          type: string
+          description: platform supported type for document fields.
+          enum:
+          - TEXT
+          - NUMBERS
+          - DATE
+          - PERIOD
+          - SELECT
+          - PHONE
+          - EMAIL
+        required:
+          type: boolean
+          description: flag indicates this document field value is mandatory
+          default: true
+        pattern:
+          type: string
+          description: regular expresion for field value validation 
+          example: "^(.*)$"
+        inputMask:
+          type: string
+          description: --??
+          
+    DocumentType:
+      properties:
+        name:
+          type: string
+          example: Formulario 149
+        description:
+          type: string
+          example: Form needed to apply for...
+        availableForReports:
+          type: boolean
+          default: true
+    
+    DocuemntField:
+      required: 
+      - value
+      properties:
+        value:
+          type: string
+          example: 6548151958462556
+    
+    RolePermission:
+      properties:
+        permissionType:
+          type: string
+          description: Enum for operations over Documents
+          enum:
+          - READ
+          - UPLOAD
+          - DOWNLOAD
+          - DELETE
+          - SIGN_REQUEST
+          - SIGN
+          
+    
